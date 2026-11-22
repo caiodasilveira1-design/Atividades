@@ -1,0 +1,105 @@
+
+import { useState } from 'react';
+
+function App() {
+  const [tarefas, setTarefas] = useState([]);
+  const [input, setInput] = useState("");
+  const [editandoId, setEditandoId] = useState(null);
+  const [textoEditado, setTextoEditado] = useState("");
+
+  const adicionarTarefa = () => {
+    if (input.trim()) {
+      const novaTarefa = {
+        id: Date.now(),
+        texto: input
+      };
+
+      setTarefas([...tarefas, novaTarefa]);
+      setInput("");
+    }
+  };
+
+  const removerTarefa = (id) => {
+    setTarefas(tarefas.filter(tarefa => tarefa.id !== id));
+  };
+
+  const iniciarEdicao = (tarefa) => {
+    setEditandoId(tarefa.id);
+    setTextoEditado(tarefa.texto);
+  };
+
+  const salvarEdicao = (id) => {
+    if (textoEditado.trim()) {
+      setTarefas(
+        tarefas.map(tarefa =>
+          tarefa.id === id
+            ? { ...tarefa, texto: textoEditado.trim() }
+            : tarefa
+        )
+      );
+
+      setEditandoId(null);
+      setTextoEditado("");
+    }
+  };
+
+  const cancelarEdicao = () => {
+    setEditandoId(null);
+    setTextoEditado("");
+  };
+
+  return (
+    <div>
+      <h1>Lista de Tarefas</h1>
+
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Digite uma tarefa"
+      />
+
+      <button onClick={adicionarTarefa}>
+        Adicionar
+      </button>
+
+      <h3>Total: {tarefas.length}</h3>
+
+      <ul>
+        {tarefas.map((tarefa) => (
+          <li key={tarefa.id}>
+            {editandoId === tarefa.id ? (
+              <>
+                <input
+                  value={textoEditado}
+                  onChange={(e) => setTextoEditado(e.target.value)}
+                />
+
+                <button onClick={() => salvarEdicao(tarefa.id)}>
+                  Salvar
+                </button>
+
+                <button onClick={cancelarEdicao}>
+                  Cancelar
+                </button>
+              </>
+            ) : (
+              <>
+                {tarefa.texto}
+
+                <button onClick={() => iniciarEdicao(tarefa)}>
+                  Editar
+                </button>
+
+                <button onClick={() => removerTarefa(tarefa.id)}>
+                  Remover
+                </button>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,51 @@
+import { useState } from 'react';
+
+function App() {
+  const [tarefas, setTarefas] = useState([]);
+  const [input, setInput] = useState("");
+
+  const adicionar = () => {
+    if (input.trim()) {
+      const novaTarefa = {
+        id: Date.now(),
+        texto: input
+      };
+
+      setTarefas([...tarefas, novaTarefa]);
+      setInput("");
+    }
+  };
+
+  const remover = (id) => {
+    setTarefas(tarefas.filter(tarefa => tarefa.id !== id));
+  };
+
+  return (
+    <div>
+      <h1>Lista de Tarefas</h1>
+
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Digite uma tarefa"
+      />
+
+      <button onClick={adicionar}>Adicionar</button>
+
+      <h3>Total de tarefas: {tarefas.length}</h3>
+
+      <ul>
+        {tarefas.map((tarefa) => (
+          <li key={tarefa.id}>
+            {tarefa.texto}
+            <button onClick={() => remover(tarefa.id)}>
+              Remover
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

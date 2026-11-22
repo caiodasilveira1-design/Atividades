@@ -1,0 +1,53 @@
+
+import { useState } from 'react';
+
+function ListaTarefas() {
+  const [tarefas, setTarefas] = useState([]);
+  const [input, setInput] = useState('');
+
+  const adicionarTarefa = () => {
+    if (input.trim()) {
+      const novaTarefa = {
+        id: Date.now(),
+        texto: input
+      };
+
+      setTarefas([...tarefas, novaTarefa]);
+      setInput('');
+    }
+  };
+
+  const removerTarefa = (id) => {
+    setTarefas(tarefas.filter(tarefa => tarefa.id !== id));
+  };
+
+  return (
+    <div>
+      <h1>Lista de Tarefas</h1>
+
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Digite uma tarefa"
+      />
+
+      <button onClick={adicionarTarefa}>
+        Adicionar
+      </button>
+
+      <ul>
+        {tarefas.map((tarefa) => (
+          <li key={tarefa.id}>
+            {tarefa.texto}
+
+            <button onClick={() => removerTarefa(tarefa.id)}>
+              Remover
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default ListaTarefas;

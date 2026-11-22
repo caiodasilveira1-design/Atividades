@@ -1,0 +1,74 @@
+
+import { useState } from 'react';
+
+function App() {
+  const [tarefas, setTarefas] = useState([]);
+  const [input, setInput] = useState("");
+
+  const adicionarTarefa = () => {
+    if (input.trim()) {
+      const novaTarefa = {
+        id: Date.now(),
+        texto: input
+      };
+
+      setTarefas([...tarefas, novaTarefa]);
+      setInput("");
+    }
+  };
+
+  const removerTarefa = (id) => {
+    setTarefas(tarefas.filter(tarefa => tarefa.id !== id));
+  };
+  
+const editarTarefa = (id) => {
+  const novoTexto = prompt("Digite o novo texto:");
+
+  if (novoTexto !== null && novoTexto.trim() !== "") {
+    setTarefas(
+      tarefas.map((tarefa) => {
+        if (tarefa.id === id) {
+          return { ...tarefa, texto: novoTexto.trim() };
+        }
+
+        return tarefa;
+      })
+    );
+  }
+};
+  return (
+    <div>
+      <h1>Lista de Tarefas</h1>
+
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Digite uma tarefa"
+      />
+
+      <button onClick={adicionarTarefa}>
+        Adicionar
+      </button>
+
+      <h3>Total: {tarefas.length}</h3>
+
+      <ul>
+        {tarefas.map((tarefa) => (
+          <li key={tarefa.id}>
+            {tarefa.texto}
+
+            <button onClick={() => editarTarefa(tarefa.id)}>
+              Editar
+            </button>
+
+            <button onClick={() => removerTarefa(tarefa.id)}>
+              Remover
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

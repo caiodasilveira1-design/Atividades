@@ -1,0 +1,4 @@
+// O filter() é preferível ao splice() porque retorna um novo array
+// sem modificar o array original. Já o splice() altera o array diretamente,
+// o que pode causar problemas na atualização do estado do React.
+// Por isso, devemos usar filter() para manter a imutabilidade do estado.
